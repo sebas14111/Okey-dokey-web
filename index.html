@@ -3,344 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Okey-Dokey | Corean Food</title>
+    <title>Okey-Dokey | Menú Interactivo</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- ESTILOS GENERALES --- */
         :root {
             --primary-orange: #ff9a76;
             --light-orange: #ffebd8;
             --text-dark: #4a4a4a;
             --bg-color: #fcfcfc;
             --pastel-pink: #ffd6e4;
-            --pastel-green: #d4edd4;
             --pastel-blue: #d4e8ff;
             --grid-line: #e0e0e0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Nunito', sans-serif;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-dark);
-            /* Fondo de cuadrícula estilo libreta */
-            background-image: 
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
             background-size: 25px 25px;
+            padding-bottom: 100px;
         }
 
-        /* --- NAVEGACIÓN --- */
         nav {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 15px 30px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background: white; padding: 15px; position: fixed; width: 100%; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--primary-orange);
-            text-decoration: none;
+        .logo { font-weight: 900; color: var(--primary-orange); text-decoration: none; font-size: 1.2rem; }
+
+        section { padding: 80px 20px 20px; max-width: 800px; margin: 0 auto; }
+
+        h2 { text-align: center; color: var(--primary-orange); margin: 20px 0; text-transform: uppercase; }
+
+        /* --- ESTILO DE PRODUCTOS --- */
+        .menu-category { background: white; padding: 20px; border-radius: 20px; border: 3px solid var(--pastel-pink); margin-bottom: 20px; }
+
+        .product-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px dashed #ddd;
         }
 
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
+        .product-info h4 { margin: 0; color: #333; }
+        .product-info p { font-size: 0.9rem; color: #777; }
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 700;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-orange);
-        }
-
-        .btn-order-nav {
-            background-color: var(--primary-orange);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /* --- SECCIONES --- */
-        section {
-            padding: 100px 20px 60px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        h1, h2 {
-            text-align: center;
-            color: var(--primary-orange);
-            margin-bottom: 40px;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px white;
-        }
-
-        h2 { font-size: 2rem; }
-
-        /* --- INICIO --- */
-        #inicio {
-            text-align: center;
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            background-color: var(--light-orange);
-            padding: 10px 20px;
-            border-radius: 25px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .cat-logo {
-            font-size: 4rem; /* Placeholder para tu logo de gatito */
-            margin-bottom: 10px;
-        }
-
-        /* --- MENÚ & COMBOS --- */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .menu-category {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            border: 3px solid var(--pastel-pink);
-        }
-
-        .menu-category:nth-child(even) {
-            border-color: var(--pastel-blue);
-        }
-
-        .menu-category h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #333;
-            border-bottom: 2px dashed var(--grid-line);
-            padding-bottom: 10px;
-        }
-
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-
-        .item-name { font-weight: 700; }
-        .item-price { color: var(--primary-orange); font-weight: 900; }
-        
-        .combo-card {
-            background: white;
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            border: 3px solid var(--pastel-green);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        .combo-card h3 {
-            color: var(--primary-orange);
-            margin-bottom: 10px;
-        }
-
-        /* --- CONTACTO / FOOTER --- */
-        #contacto {
-            background-color: white;
-            padding: 60px 20px;
-            text-align: center;
-            border-top: 4px dashed var(--pastel-pink);
-            margin-top: 50px;
-        }
-
-        .contact-info {
-            font-size: 1.2rem;
-            margin: 20px 0;
-            line-height: 1.8;
-        }
-
-        .btn-whatsapp {
-            display: inline-block;
-            background-color: #25D366; /* Color de WhatsApp */
-            color: white;
-            padding: 15px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        .add-btn {
+            background: var(--primary-orange); color: white; border: none;
+            padding: 8px 15px; border-radius: 15px; cursor: pointer; font-weight: bold;
             transition: transform 0.2s;
         }
 
-        .btn-whatsapp:hover {
-            transform: scale(1.05);
+        .add-btn:hover { transform: scale(1.1); }
+
+        /* --- CARRITO FLOTANTE --- */
+        .cart-container {
+            position: fixed; bottom: 20px; right: 20px; left: 20px;
+            background: white; border-radius: 25px; padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            display: none; z-index: 2000;
+            border: 3px solid var(--primary-orange);
         }
 
-        .allergy-warning {
-            margin-top: 30px;
-            font-style: italic;
-            color: #888;
-            font-size: 0.9rem;
+        .cart-header { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 10px; border-bottom: 2px solid var(--light-orange); padding-bottom: 5px; }
+
+        #cart-items { max-height: 150px; overflow-y: auto; margin-bottom: 10px; font-size: 0.9rem; }
+
+        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+
+        .btn-send {
+            background: #25D366; color: white; text-align: center; display: block;
+            padding: 12px; border-radius: 15px; text-decoration: none; font-weight: 900;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .nav-links { display: none; /* Oculta links en móvil para simplificar */ }
-            nav { justify-content: center; }
-            h1 { font-size: 2rem; }
-        }
+        .badge { background: red; color: white; border-radius: 50%; padding: 2px 7px; font-size: 0.7rem; margin-left: 5px; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#inicio" class="logo">오키 도키 OKEY-DOKEY</a>
-        <ul class="nav-links">
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#menu">Menú</a></li>
-            <li><a href="#combos">Combos</a></li>
-        </ul>
-        <a href="https://wa.me/584121010778?text=Hola,%20vengo%20de%20la%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="btn-order-nav">Ordenar ahora</a>
+        <a href="#" class="logo">오키 도키 OKEY-DOKEY</a>
+        <div style="font-weight: bold;">Menú Digital 🥢</div>
     </nav>
 
-    <section id="inicio">
-        <div class="cat-logo">🐱🥟</div> <h1>Okey-Dokey</h1>
-        <div class="subtitle">Corean Food</div>
-        <p style="font-size: 1.2rem; max-width: 600px; margin: 20px auto; color: #666;">
-            Disfruta de la mejor comida coreana con nuestro servicio de delivery. ¡Hecho con amor y el mejor sabor!
-        </p>
-    </section>
-
     <section id="menu">
-        <h2>Nuestro Menú 🥢</h2>
-        <div class="menu-grid">
-            
-            <div class="menu-category">
-                <h3>🥟 Dumplings</h3>
-                <div class="menu-item">
-                    <span class="item-name">Carne</span>
-                    <span class="item-price">7.50$</span>
-                </div>
-                <div class="menu-item">
-                    <span class="item-name">Cerdo</span>
-                    <span class="item-price">6.50$</span>
-                </div>
-                <div class="menu-item">
-                    <span class="item-name">Vegetales</span>
-                    <span class="item-price">5.00$</span>
-                </div>
-                <div class="menu-item">
-                    <span class="item-name">Cerdo con Kimchi</span>
-                    <span class="item-price">7.00$</span>
-                </div>
-            </div>
-
-            <div class="menu-category">
-                <h3>🍜 Tallarines</h3>
-                <div class="menu-item">
-                    <span class="item-name">Tallarines picantes</span>
-                    <span class="item-price">8.00$</span>
-                </div>
-                
-                <h3 style="margin-top: 30px;">🌶️ Tteokbokki</h3>
-                <div class="menu-item">
-                    <span class="item-name">Tradicional 🌶️🌶️🌶️</span>
-                    <span class="item-price">6.00$</span>
-                </div>
-            </div>
-
-            <div class="menu-category" style="grid-column: 1 / -1; max-width: 400px; margin: 0 auto; width: 100%;">
-                <h3>🧋 Bebidas</h3>
-                <div class="menu-item">
-                    <span class="item-name">Bubble tea limón</span>
-                    <span class="item-price">2.00$</span>
-                </div>
-                <div class="menu-item">
-                    <span class="item-name">Bubble tea frutilla</span>
-                    <span class="item-price">3.00$</span>
-                </div>
-                <div class="menu-item">
-                    <span class="item-name">Bubble Milk frutilla</span>
-                    <span class="item-price">4.00$</span>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="combos">
-        <h2>Combos Especiales ✨</h2>
-        <div class="menu-grid">
-            
-            <div class="combo-card">
-                <h3>Ración Mixta</h3>
-                <p>20 unidades de Dumpling + Refresco 1L</p>
-                <div class="item-price" style="font-size: 1.5rem; margin-top: 10px;">19.00$</div>
-            </div>
-
-            <div class="combo-card">
-                <h3>Mochis + Bubble Milk</h3>
-                <p><em>(Bajo reservación)</em></p>
-                <div class="item-price" style="font-size: 1.5rem; margin-top: 10px;">9.00$</div>
-            </div>
-
-            <div class="combo-card">
-                <h3>Box Especial</h3>
-                <p>Dumplings, Tteokbokki y Papas Fritas</p>
-                <div class="item-price" style="font-size: 1.5rem; margin-top: 10px;">11.00$</div>
-            </div>
-
-        </div>
-    </section>
-
-    <footer id="contacto">
-        <h2>¡Haz tu pedido! 🛵</h2>
-        <div class="contact-info">
-            <p><strong>Contamos con delivery</strong></p>
-            <p>📱 WhatsApp: 0412 101 0778</p>
-            <p>📸 Instagram & TikTok: @okeydokeyve_</p>
-        </div>
+        <h2>Menú Principal</h2>
         
-        <a href="https://wa.me/584121010778?text=Hola,%20me%20gustaría%20ordenar%20comida%20coreana" target="_blank" class="btn-whatsapp">
-            Pedir por WhatsApp
-        </a>
+        <div class="menu-category">
+            <h3>🥟 Dumplings</h3>
+            <div class="product-item">
+                <div class="product-info"><h4>Dumpling Carne</h4><p>7.50$</p></div>
+                <button class="add-btn" onclick="addToCart('Dumpling Carne', 7.50)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Dumpling Cerdo</h4><p>6.50$</p></div>
+                <button class="add-btn" onclick="addToCart('Dumpling Cerdo', 6.50)">+ Agregar</button>
+            </div>
+        </div>
 
-        <p class="allergy-warning">*Por favor infórmanos si tienes alguna alergia o intolerancia alimentaria al momento de ordenar.</p>
-    </footer>
+        <div class="menu-category">
+            <h3>🍜 Especialidades</h3>
+            <div class="product-item">
+                <div class="product-info"><h4>Tteokbokki Tradicional</h4><p>6.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Tteokbokki Tradicional', 6.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Tallarines Picantes</h4><p>8.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Tallarines Picantes', 8.00)">+ Agregar</button>
+            </div>
+        </div>
 
+        <div class="menu-category">
+            <h3>🧋 Bebidas</h3>
+            <div class="product-item">
+                <div class="product-info"><h4>Bubble Milk Frutilla</h4><p>4.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Bubble Milk Frutilla', 4.00)">+ Agregar</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="cart" class="cart-container">
+        <div class="cart-header">
+            <span>Tu Pedido 🛍️</span>
+            <span id="cart-total">Total: 0.00$</span>
+        </div>
+        <div id="cart-items">
+            </div>
+        <a href="#" id="whatsapp-link" class="btn-send" target="_blank">Enviar pedido por WhatsApp</a>
+        <button onclick="clearCart()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; cursor:pointer;">Vaciar carrito</button>
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartElement = document.getElementById('cart');
+            const itemsElement = document.getElementById('cart-items');
+            const totalElement = document.getElementById('cart-total');
+            const whatsappLink = document.getElementById('whatsapp-link');
+
+            if (cart.length > 0) {
+                cartElement.style.display = 'block';
+            } else {
+                cartElement.style.display = 'none';
+            }
+
+            itemsElement.innerHTML = '';
+            total = 0;
+
+            // Agrupar productos para mostrar cantidad (ej: 2x Dumplings)
+            const summary = {};
+            cart.forEach(item => {
+                summary[item.name] = (summary[item.name] || 0) + 1;
+                total += item.price;
+            });
+
+            let messageText = "¡Hola! Quisiera hacer el siguiente pedido:%0A%0A";
+
+            for (const name in summary) {
+                const row = document.createElement('div');
+                row.className = 'cart-item-row';
+                row.innerHTML = `<span>${summary[name]}x ${name}</span>`;
+                itemsElement.appendChild(row);
+                messageText += `- ${summary[name]}x ${name}%0A`;
+            }
+
+            totalElement.innerText = `Total: ${total.toFixed(2)}$`;
+            messageText += `%0A*Total: ${total.toFixed(2)}$*`;
+
+            // Configurar el link de WhatsApp (Cambia el número por el tuyo)
+            whatsappLink.href = `https://wa.me/584121010778?text=${messageText}`;
+        }
+    </script>
 </body>
 </html>
