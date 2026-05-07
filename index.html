@@ -10,7 +10,7 @@
             --primary-orange: #ff9a76;
             --light-orange: rgba(255, 235, 216, 0.85);
             --text-dark: #4a4a4a;
-            --bg-color-overlay: rgba(255, 255, 255, 0.7);
+            --bg-color-overlay: rgba(255, 255, 255, 0.5);
             --pastel-pink: rgba(255, 214, 228, 0.8);
         }
 
@@ -23,7 +23,7 @@
             background-attachment: fixed;
             background-repeat: no-repeat;
             color: var(--text-dark);
-            padding-bottom: 120px;
+            padding-bottom: 150px;
         }
 
         nav {
@@ -38,7 +38,7 @@
         h2 { text-align: center; color: var(--text-dark); margin: 20px 0; text-transform: uppercase; text-shadow: 2px 2px 0px white; font-size: 2rem;}
 
         .menu-category { 
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             padding: 25px; 
             border-radius: 25px; 
             border: 3px solid var(--pastel-pink); 
@@ -53,38 +53,42 @@
             padding: 15px 0; border-bottom: 1px dashed #eee;
         }
 
-        .product-info h4 { margin: 0; color: #333; font-size: 1.1rem;}
+        .product-info h4 { margin: 0; color: #333; font-size: 1.1rem; max-width: 180px;}
         .product-info p { font-size: 1rem; color: var(--primary-orange); font-weight: bold;}
 
-        .add-btn {
-            background: var(--primary-orange); color: white; border: none;
-            padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold;
-            transition: transform 0.2s, background 0.3s;
-            box-shadow: 0 4px 6px rgba(255, 154, 118, 0.3);
+        /* --- CONTROLES DE CANTIDAD --- */
+        .qty-controls {
+            display: flex; align-items: center; gap: 10px;
+            background: white; padding: 5px 10px; border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .add-btn:hover { transform: scale(1.05); background: #ff8a60; }
+        .btn-qty {
+            background: var(--primary-orange); color: white; border: none;
+            width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+            font-weight: 900; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+        }
 
+        .qty-num { font-weight: 900; min-width: 20px; text-align: center; font-size: 1.1rem; }
+
+        /* --- CARRITO --- */
         .cart-container {
             position: fixed; bottom: 20px; right: 20px; left: 20px;
-            background: rgba(255, 255, 255, 0.98); border-radius: 30px; padding: 25px;
+            background: white; border-radius: 30px; padding: 25px;
             box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
             display: none; z-index: 2000;
             border: 4px solid var(--primary-orange);
             max-width: 600px; margin: 0 auto;
         }
 
-        .cart-header { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 15px; border-bottom: 2px solid var(--light-orange); padding-bottom: 10px; font-size: 1.1rem;}
+        .cart-header { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 15px; border-bottom: 2px solid var(--light-orange); padding-bottom: 10px;}
 
-        #cart-items { max-height: 180px; overflow-y: auto; margin-bottom: 15px; font-size: 1rem; padding-right: 10px;}
-
-        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid #eee;}
+        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem;}
 
         .btn-send {
             background: #25D366; color: white; text-align: center; display: block;
             padding: 15px; border-radius: 20px; text-decoration: none; font-weight: 900;
-            font-size: 1.1rem; transition: transform 0.2s;
-            box-shadow: 0 6px 12px rgba(37, 211, 102, 0.3);
+            font-size: 1.1rem; margin-top: 10px;
         }
     </style>
 </head>
@@ -99,50 +103,86 @@
         <h2>Menú de Hoy</h2>
 
         <div class="menu-category">
-            <h3>✨ Combos Especiales</h3>
+            <h3>✨ Combos</h3>
             <div class="product-item">
                 <div class="product-info"><h4>Ración Mixta (20 und + Refresco 1L)</h4><p>19.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Combo Ración Mixta', 19.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Ración Mixta', 19.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Ración Mixta">0</span>
+                    <button class="btn-qty" onclick="changeQty('Ración Mixta', 19.00, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Mochis + Bubble Milk</h4><p>9.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Combo Mochis + Bubble Milk', 9.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Mochis + Bubble Milk', 9.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Mochis + Bubble Milk">0</span>
+                    <button class="btn-qty" onclick="changeQty('Mochis + Bubble Milk', 9.00, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Box Especial (Dumplings, Tteokbokki y Papas)</h4><p>11.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Box Especial', 11.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Box Especial', 11.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Box Especial">0</span>
+                    <button class="btn-qty" onclick="changeQty('Box Especial', 11.00, 1)">+</button>
+                </div>
             </div>
         </div>
-        
+
         <div class="menu-category">
             <h3>🥟 Dumplings</h3>
             <div class="product-item">
                 <div class="product-info"><h4>Carne</h4><p>7.50$</p></div>
-                <button class="add-btn" onclick="addToCart('Dumpling Carne', 7.50)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Dumpling Carne', 7.50, -1)">-</button>
+                    <span class="qty-num" id="qty-Dumpling Carne">0</span>
+                    <button class="btn-qty" onclick="changeQty('Dumpling Carne', 7.50, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Cerdo</h4><p>6.50$</p></div>
-                <button class="add-btn" onclick="addToCart('Dumpling Cerdo', 6.50)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo', 6.50, -1)">-</button>
+                    <span class="qty-num" id="qty-Dumpling Cerdo">0</span>
+                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo', 6.50, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Vegetales</h4><p>5.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Dumpling Vegetales', 5.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Dumpling Vegetales', 5.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Dumpling Vegetales">0</span>
+                    <button class="btn-qty" onclick="changeQty('Dumpling Vegetales', 5.00, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Cerdo con Kimchi</h4><p>7.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Dumpling Cerdo Kimchi', 7.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo con Kimchi', 7.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Dumpling Cerdo con Kimchi">0</span>
+                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo con Kimchi', 7.00, 1)">+</button>
+                </div>
             </div>
         </div>
 
         <div class="menu-category">
             <h3>🍜 Platos Principales</h3>
             <div class="product-item">
-                <div class="product-info"><h4>Tallarines Picantes</h4><p>8.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Tallarines Picantes', 8.00)">+ Agregar</button>
+                <div class="product-info"><h4>Tallarines picantes</h4><p>8.00$</p></div>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Tallarines picantes', 8.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Tallarines picantes">0</span>
+                    <button class="btn-qty" onclick="changeQty('Tallarines picantes', 8.00, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
-                <div class="product-info"><h4>Tteokbokki Tradicional 🌶️🌶️</h4><p>6.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Tteokbokki Tradicional', 6.00)">+ Agregar</button>
+                <div class="product-info"><h4>Tteokbokki Tradicional</h4><p>6.00$</p></div>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Tteokbokki Tradicional', 6.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Tteokbokki Tradicional">0</span>
+                    <button class="btn-qty" onclick="changeQty('Tteokbokki Tradicional', 6.00, 1)">+</button>
+                </div>
             </div>
         </div>
 
@@ -150,15 +190,27 @@
             <h3>🧋 Bebidas</h3>
             <div class="product-item">
                 <div class="product-info"><h4>Bubble tea limón</h4><p>2.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Bubble tea limón', 2.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Bubble tea limón', 2.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Bubble tea limón">0</span>
+                    <button class="btn-qty" onclick="changeQty('Bubble tea limón', 2.00, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Bubble tea frutilla</h4><p>3.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Bubble tea frutilla', 3.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Bubble tea frutilla', 3.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Bubble tea frutilla">0</span>
+                    <button class="btn-qty" onclick="changeQty('Bubble tea frutilla', 3.00, 1)">+</button>
+                </div>
             </div>
             <div class="product-item">
                 <div class="product-info"><h4>Bubble Milk frutilla</h4><p>4.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Bubble Milk frutilla', 4.00)">+ Agregar</button>
+                <div class="qty-controls">
+                    <button class="btn-qty" onclick="changeQty('Bubble Milk frutilla', 4.00, -1)">-</button>
+                    <span class="qty-num" id="qty-Bubble Milk frutilla">0</span>
+                    <button class="btn-qty" onclick="changeQty('Bubble Milk frutilla', 4.00, 1)">+</button>
+                </div>
             </div>
         </div>
 
@@ -171,21 +223,36 @@
             <span id="cart-total">Total: 0.00$</span>
         </div>
         <div id="cart-items"></div>
-        <a href="#" id="whatsapp-link" class="btn-send" target="_blank">Enviar pedido por WhatsApp</a>
-        <button onclick="clearCart()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; cursor:pointer; width: 100%; text-align: center;">Vaciar carrito</button>
+        <a href="#" id="whatsapp-link" class="btn-send" target="_blank">Pedir por WhatsApp</a>
+        <button onclick="clearCart()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; cursor:pointer; width: 100%; text-align: center;">Vaciar pedido</button>
     </div>
 
     <script>
-        let cart = [];
-        let total = 0;
+        let cart = {};
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
+        function changeQty(name, price, delta) {
+            if (!cart[name]) {
+                cart[name] = { qty: 0, price: price };
+            }
+            cart[name].qty += delta;
+
+            if (cart[name].qty <= 0) {
+                cart[name].qty = 0;
+                delete cart[name];
+            }
+
+            const qtyLabel = document.getElementById(`qty-${name}`);
+            if (qtyLabel) qtyLabel.innerText = cart[name] ? cart[name].qty : 0;
+
             updateCartUI();
         }
 
         function clearCart() {
-            cart = [];
+            for (const name in cart) {
+                const qtyLabel = document.getElementById(`qty-${name}`);
+                if (qtyLabel) qtyLabel.innerText = 0;
+            }
+            cart = {};
             updateCartUI();
         }
 
@@ -195,31 +262,30 @@
             const totalElement = document.getElementById('cart-total');
             const whatsappLink = document.getElementById('whatsapp-link');
 
-            cart.length > 0 ? cartElement.style.display = 'block' : cartElement.style.display = 'none';
-
             itemsElement.innerHTML = '';
-            total = 0;
-
-            const summary = {};
-            cart.forEach(item => {
-                summary[item.name] = (summary[item.name] || 0) + 1;
-                total += item.price;
-            });
-
+            let total = 0;
             let messageText = "¡Hola Okey-Dokey! Quisiera hacer el siguiente pedido:%0A%0A";
+            let hasItems = false;
 
-            for (const name in summary) {
-                const row = document.createElement('div');
-                row.className = 'cart-item-row';
-                row.innerHTML = `<span>${summary[name]}x ${name}</span><span>${(summary[name] * cart.find(i => i.name === name).price).toFixed(2)}$</span>`;
-                itemsElement.appendChild(row);
-                messageText += `- ${summary[name]}x ${name}%0A`;
+            for (const name in cart) {
+                hasItems = true;
+                const item = cart[name];
+                const subtotal = item.qty * item.price;
+                total += subtotal;
+
+                itemsElement.innerHTML += `
+                    <div class="cart-item-row">
+                        <span>${item.qty}x ${name}</span>
+                        <span>${subtotal.toFixed(2)}$</span>
+                    </div>`;
+                
+                messageText += `- ${item.qty}x ${name} (${subtotal.toFixed(2)}$)%0A`;
             }
 
+            cartElement.style.display = hasItems ? 'block' : 'none';
             totalElement.innerText = `Total: ${total.toFixed(2)}$`;
-            messageText += `%0A*Total a pagar: ${total.toFixed(2)}$*%0A%0A_Pedido realizado desde el menú digital_`;
+            messageText += `%0A*Total: ${total.toFixed(2)}$*%0A%0A_Enviado desde el menú digital_`;
 
-            // Tu número de teléfono ya está configurado según las imágenes
             whatsappLink.href = `https://wa.me/584121010778?text=${messageText}`;
         }
     </script>
