@@ -8,117 +8,161 @@
     <style>
         :root {
             --primary-orange: #ff9a76;
-            --light-orange: #ffebd8;
+            --light-orange: rgba(255, 235, 216, 0.85);
             --text-dark: #4a4a4a;
-            --bg-color: #fcfcfc;
-            --pastel-pink: #ffd6e4;
-            --pastel-blue: #d4e8ff;
-            --grid-line: #e0e0e0;
+            --bg-color-overlay: rgba(255, 255, 255, 0.7);
+            --pastel-pink: rgba(255, 214, 228, 0.8);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; scroll-behavior: smooth; }
 
         body {
-            background-color: var(--bg-color);
-            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 25px 25px;
-            padding-bottom: 100px;
+            background-image: linear-gradient(var(--bg-color-overlay), var(--bg-color-overlay)), url('fondo-okey-dokey.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: var(--text-dark);
+            padding-bottom: 120px;
         }
 
         nav {
-            background: white; padding: 15px; position: fixed; width: 100%; top: 0; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); padding: 15px; position: fixed; width: 100%; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .logo { font-weight: 900; color: var(--primary-orange); text-decoration: none; font-size: 1.2rem; }
+        .logo { font-weight: 900; color: var(--primary-orange); text-decoration: none; font-size: 1.2rem; text-shadow: 1px 1px 0px white;}
 
-        section { padding: 80px 20px 20px; max-width: 800px; margin: 0 auto; }
+        section { padding: 100px 20px 20px; max-width: 800px; margin: 0 auto; }
 
-        h2 { text-align: center; color: var(--primary-orange); margin: 20px 0; text-transform: uppercase; }
+        h2 { text-align: center; color: var(--text-dark); margin: 20px 0; text-transform: uppercase; text-shadow: 2px 2px 0px white; font-size: 2rem;}
 
-        /* --- ESTILO DE PRODUCTOS --- */
-        .menu-category { background: white; padding: 20px; border-radius: 20px; border: 3px solid var(--pastel-pink); margin-bottom: 20px; }
+        .menu-category { 
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px; 
+            border-radius: 25px; 
+            border: 3px solid var(--pastel-pink); 
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .menu-category h3 { color: var(--primary-orange); margin-bottom: 15px; border-bottom: 2px dashed #eee; padding-bottom: 5px;}
 
         .product-item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px dashed #ddd;
+            padding: 15px 0; border-bottom: 1px dashed #eee;
         }
 
-        .product-info h4 { margin: 0; color: #333; }
-        .product-info p { font-size: 0.9rem; color: #777; }
+        .product-info h4 { margin: 0; color: #333; font-size: 1.1rem;}
+        .product-info p { font-size: 1rem; color: var(--primary-orange); font-weight: bold;}
 
         .add-btn {
             background: var(--primary-orange); color: white; border: none;
-            padding: 8px 15px; border-radius: 15px; cursor: pointer; font-weight: bold;
-            transition: transform 0.2s;
+            padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 4px 6px rgba(255, 154, 118, 0.3);
         }
 
-        .add-btn:hover { transform: scale(1.1); }
+        .add-btn:hover { transform: scale(1.05); background: #ff8a60; }
 
-        /* --- CARRITO FLOTANTE --- */
         .cart-container {
             position: fixed; bottom: 20px; right: 20px; left: 20px;
-            background: white; border-radius: 25px; padding: 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 0.98); border-radius: 30px; padding: 25px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
             display: none; z-index: 2000;
-            border: 3px solid var(--primary-orange);
+            border: 4px solid var(--primary-orange);
+            max-width: 600px; margin: 0 auto;
         }
 
-        .cart-header { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 10px; border-bottom: 2px solid var(--light-orange); padding-bottom: 5px; }
+        .cart-header { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 15px; border-bottom: 2px solid var(--light-orange); padding-bottom: 10px; font-size: 1.1rem;}
 
-        #cart-items { max-height: 150px; overflow-y: auto; margin-bottom: 10px; font-size: 0.9rem; }
+        #cart-items { max-height: 180px; overflow-y: auto; margin-bottom: 15px; font-size: 1rem; padding-right: 10px;}
 
-        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid #eee;}
 
         .btn-send {
             background: #25D366; color: white; text-align: center; display: block;
-            padding: 12px; border-radius: 15px; text-decoration: none; font-weight: 900;
+            padding: 15px; border-radius: 20px; text-decoration: none; font-weight: 900;
+            font-size: 1.1rem; transition: transform 0.2s;
+            box-shadow: 0 6px 12px rgba(37, 211, 102, 0.3);
         }
-
-        .badge { background: red; color: white; border-radius: 50%; padding: 2px 7px; font-size: 0.7rem; margin-left: 5px; }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="#" class="logo">오키 도키 OKEY-DOKEY</a>
-        <div style="font-weight: bold;">Menú Digital 🥢</div>
+        <div style="font-weight: bold;">Menú Coreano 🥢</div>
     </nav>
 
     <section id="menu">
-        <h2>Menú Principal</h2>
+        <h2>Menú de Hoy</h2>
+
+        <div class="menu-category">
+            <h3>✨ Combos Especiales</h3>
+            <div class="product-item">
+                <div class="product-info"><h4>Ración Mixta (20 und + Refresco 1L)</h4><p>19.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Combo Ración Mixta', 19.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Mochis + Bubble Milk</h4><p>9.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Combo Mochis + Bubble Milk', 9.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Box Especial (Dumplings, Tteokbokki y Papas)</h4><p>11.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Box Especial', 11.00)">+ Agregar</button>
+            </div>
+        </div>
         
         <div class="menu-category">
             <h3>🥟 Dumplings</h3>
             <div class="product-item">
-                <div class="product-info"><h4>Dumpling Carne</h4><p>7.50$</p></div>
+                <div class="product-info"><h4>Carne</h4><p>7.50$</p></div>
                 <button class="add-btn" onclick="addToCart('Dumpling Carne', 7.50)">+ Agregar</button>
             </div>
             <div class="product-item">
-                <div class="product-info"><h4>Dumpling Cerdo</h4><p>6.50$</p></div>
+                <div class="product-info"><h4>Cerdo</h4><p>6.50$</p></div>
                 <button class="add-btn" onclick="addToCart('Dumpling Cerdo', 6.50)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Vegetales</h4><p>5.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Dumpling Vegetales', 5.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Cerdo con Kimchi</h4><p>7.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Dumpling Cerdo Kimchi', 7.00)">+ Agregar</button>
             </div>
         </div>
 
         <div class="menu-category">
-            <h3>🍜 Especialidades</h3>
-            <div class="product-item">
-                <div class="product-info"><h4>Tteokbokki Tradicional</h4><p>6.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Tteokbokki Tradicional', 6.00)">+ Agregar</button>
-            </div>
+            <h3>🍜 Platos Principales</h3>
             <div class="product-item">
                 <div class="product-info"><h4>Tallarines Picantes</h4><p>8.00$</p></div>
                 <button class="add-btn" onclick="addToCart('Tallarines Picantes', 8.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Tteokbokki Tradicional 🌶️🌶️</h4><p>6.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Tteokbokki Tradicional', 6.00)">+ Agregar</button>
             </div>
         </div>
 
         <div class="menu-category">
             <h3>🧋 Bebidas</h3>
             <div class="product-item">
-                <div class="product-info"><h4>Bubble Milk Frutilla</h4><p>4.00$</p></div>
-                <button class="add-btn" onclick="addToCart('Bubble Milk Frutilla', 4.00)">+ Agregar</button>
+                <div class="product-info"><h4>Bubble tea limón</h4><p>2.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Bubble tea limón', 2.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Bubble tea frutilla</h4><p>3.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Bubble tea frutilla', 3.00)">+ Agregar</button>
+            </div>
+            <div class="product-item">
+                <div class="product-info"><h4>Bubble Milk frutilla</h4><p>4.00$</p></div>
+                <button class="add-btn" onclick="addToCart('Bubble Milk frutilla', 4.00)">+ Agregar</button>
             </div>
         </div>
+
+        <p style="text-align: center; font-style: italic; margin-top: 20px;">*Por favor infórmanos si tienes alguna alergia o intolerancia</p>
     </section>
 
     <div id="cart" class="cart-container">
@@ -126,10 +170,9 @@
             <span>Tu Pedido 🛍️</span>
             <span id="cart-total">Total: 0.00$</span>
         </div>
-        <div id="cart-items">
-            </div>
+        <div id="cart-items"></div>
         <a href="#" id="whatsapp-link" class="btn-send" target="_blank">Enviar pedido por WhatsApp</a>
-        <button onclick="clearCart()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; cursor:pointer;">Vaciar carrito</button>
+        <button onclick="clearCart()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; cursor:pointer; width: 100%; text-align: center;">Vaciar carrito</button>
     </div>
 
     <script>
@@ -152,36 +195,31 @@
             const totalElement = document.getElementById('cart-total');
             const whatsappLink = document.getElementById('whatsapp-link');
 
-            if (cart.length > 0) {
-                cartElement.style.display = 'block';
-            } else {
-                cartElement.style.display = 'none';
-            }
+            cart.length > 0 ? cartElement.style.display = 'block' : cartElement.style.display = 'none';
 
             itemsElement.innerHTML = '';
             total = 0;
 
-            // Agrupar productos para mostrar cantidad (ej: 2x Dumplings)
             const summary = {};
             cart.forEach(item => {
                 summary[item.name] = (summary[item.name] || 0) + 1;
                 total += item.price;
             });
 
-            let messageText = "¡Hola! Quisiera hacer el siguiente pedido:%0A%0A";
+            let messageText = "¡Hola Okey-Dokey! Quisiera hacer el siguiente pedido:%0A%0A";
 
             for (const name in summary) {
                 const row = document.createElement('div');
                 row.className = 'cart-item-row';
-                row.innerHTML = `<span>${summary[name]}x ${name}</span>`;
+                row.innerHTML = `<span>${summary[name]}x ${name}</span><span>${(summary[name] * cart.find(i => i.name === name).price).toFixed(2)}$</span>`;
                 itemsElement.appendChild(row);
                 messageText += `- ${summary[name]}x ${name}%0A`;
             }
 
             totalElement.innerText = `Total: ${total.toFixed(2)}$`;
-            messageText += `%0A*Total: ${total.toFixed(2)}$*`;
+            messageText += `%0A*Total a pagar: ${total.toFixed(2)}$*%0A%0A_Pedido realizado desde el menú digital_`;
 
-            // Configurar el link de WhatsApp (Cambia el número por el tuyo)
+            // Tu número de teléfono ya está configurado según las imágenes
             whatsappLink.href = `https://wa.me/584121010778?text=${messageText}`;
         }
     </script>
