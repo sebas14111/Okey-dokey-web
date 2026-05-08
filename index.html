@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Okey-Dokey | Menú Interactivo</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -12,281 +12,374 @@
             --text-dark: #4a4a4a;
             --bg-color-overlay: rgba(255, 255, 255, 0.5);
             --pastel-pink: rgba(255, 214, 228, 0.8);
+            --rose-pink: #ff85a1;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
 
         body {
             background-image: linear-gradient(var(--bg-color-overlay), var(--bg-color-overlay)), url('fondo-okey-dokey.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-repeat: no-repeat;
             color: var(--text-dark);
-            padding-bottom: 150px;
+            overflow-x: hidden; /* Evita el rebote lateral */
+            width: 100%;
         }
 
+        /* NAVEGACIÓN CORREGIDA */
         nav {
-            background: rgba(255, 255, 255, 0.95); padding: 15px; position: fixed; width: 100%; top: 0; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.98); 
+            padding: 10px 15px; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: 60px;
         }
 
-        .logo { font-weight: 900; color: var(--primary-orange); text-decoration: none; font-size: 1.2rem; text-shadow: 1px 1px 0px white;}
+        .logo { font-weight: 900; color: var(--primary-orange); text-decoration: none; font-size: 1rem; white-space: nowrap; }
 
-        section { padding: 100px 20px 20px; max-width: 800px; margin: 0 auto; }
+        .btn-page-toggle {
+            background: var(--primary-orange);
+            color: white; border: none; 
+            padding: 8px 12px; 
+            border-radius: 20px;
+            font-weight: bold; cursor: pointer; 
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: 0.3s;
+        }
 
-        h2 { text-align: center; color: var(--text-dark); margin: 20px 0; text-transform: uppercase; text-shadow: 2px 2px 0px white; font-size: 2rem;}
+        /* CONTENEDOR DESLIZANTE */
+        .slider-wrapper {
+            overflow: hidden;
+            width: 100vw;
+        }
 
+        .main-slider {
+            display: flex;
+            width: 300vw; /* Tres páginas */
+            transition: transform 0.5s ease-in-out;
+            min-height: 100vh;
+        }
+
+        .page-section {
+            width: 100vw;
+            padding: 80px 15px 200px; /* Espacio para el carrito abajo */
+            flex-shrink: 0;
+        }
+
+        h2 { text-align: center; margin-bottom: 25px; text-transform: uppercase; font-size: 1.6rem; color: var(--text-dark); text-shadow: 1px 1px white; }
+        
+        /* TARJETAS DE MENÚ */
         .menu-category { 
-            background: rgba(255, 255, 255, 0.92);
-            padding: 25px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 18px; 
             border-radius: 25px; 
             border: 3px solid var(--pastel-pink); 
-            margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px; 
+            max-width: 600px; 
+            margin-inline: auto;
         }
 
-        .menu-category h3 { color: var(--primary-orange); margin-bottom: 15px; border-bottom: 2px dashed #eee; padding-bottom: 5px;}
+        .menu-category h3 { color: var(--primary-orange); margin-bottom: 12px; border-bottom: 2px dashed #eee; padding-bottom: 5px; font-size: 1.1rem; }
 
-        .product-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 0; border-bottom: 1px dashed #eee;
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #eee; gap: 10px; }
+        .product-info h4 { margin: 0; font-size: 0.95rem; line-height: 1.2; }
+        .product-info p { color: var(--primary-orange); font-weight: bold; font-size: 0.9rem; }
+
+        .qty-controls { display: flex; align-items: center; gap: 8px; background: white; padding: 4px 8px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .btn-qty { background: var(--primary-orange); color: white; border: none; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+
+        /* GALERÍA */
+        .photo-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+            gap: 10px; 
+            max-width: 800px; 
+            margin: 0 auto; 
         }
 
-        .product-info h4 { margin: 0; color: #333; font-size: 1.1rem; max-width: 180px;}
-        .product-info p { font-size: 1rem; color: var(--primary-orange); font-weight: bold;}
+        .photo-card { background: white; padding: 6px; border-radius: 12px; border: 2px solid var(--pastel-pink); cursor: pointer; }
+        .photo-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; display: block; }
 
-        /* --- CONTROLES DE CANTIDAD --- */
-        .qty-controls {
-            display: flex; align-items: center; gap: 10px;
-            background: white; padding: 5px 10px; border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        @media (min-width: 768px) {
+            .photo-grid { grid-template-columns: repeat(4, 1fr); }
+            .photo-card img { height: 220px; }
+            .logo { font-size: 1.3rem; }
+            .btn-page-toggle { padding: 10px 20px; font-size: 1rem; }
+            h2 { font-size: 2.2rem; }
         }
 
-        .btn-qty {
-            background: var(--primary-orange); color: white; border: none;
-            width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-            font-weight: 900; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+        /* LIGHTBOX */
+        #lightbox {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center; padding: 15px;
         }
+        #lightbox img { max-width: 100%; max-height: 85vh; border-radius: 10px; border: 3px solid white; }
 
-        .qty-num { font-weight: 900; min-width: 20px; text-align: center; font-size: 1.1rem; }
+        /* NOTAS Y ALERTAS */
+        .delivery-note { text-align: center; background: white; padding: 18px; border-radius: 20px; border: 2px dashed var(--primary-orange); max-width: 500px; margin: 20px auto; font-size: 0.85rem; line-height: 1.4; }
+        .warning-text { color: #d9534f; font-weight: bold; margin-bottom: 5px; display: block; font-size: 0.95rem; }
 
-        /* --- CARRITO --- */
-        .cart-container {
-            position: fixed; bottom: 20px; right: 20px; left: 20px;
-            background: white; border-radius: 30px; padding: 25px;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
-            display: none; z-index: 2000;
-            border: 4px solid var(--primary-orange);
-            max-width: 600px; margin: 0 auto;
+        /* CARRITO MÓVIL OPTIMIZADO */
+        .cart-container { 
+            position: fixed; 
+            bottom: 15px; 
+            right: 15px; 
+            left: 15px; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 15px; 
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.2); 
+            display: none; 
+            z-index: 2000; 
+            border: 3px solid var(--primary-orange); 
+            max-width: 500px; 
+            margin: 0 auto; 
         }
-
-        .cart-header { display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 15px; border-bottom: 2px solid var(--light-orange); padding-bottom: 10px;}
-
-        .cart-item-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95rem;}
-
-        .btn-send {
-            background: #25D366; color: white; text-align: center; display: block;
-            padding: 15px; border-radius: 20px; text-decoration: none; font-weight: 900;
-            font-size: 1.1rem; margin-top: 10px;
-        }
+        .btn-send { background: #25D366; color: white; text-align: center; display: block; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 900; margin-top: 8px; font-size: 1rem; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#" class="logo">오키 도키 OKEY-DOKEY</a>
-        <div style="font-weight: bold;">Menú Coreano 🥢</div>
+        <a href="#" class="logo">OKEY-DOKEY VE</a>
+        <button class="btn-page-toggle" id="toggleBtn" onclick="nextPage()">Ver Eventos 🌹</button>
     </nav>
 
-    <section id="menu">
-        <h2>Menú de Hoy</h2>
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="">
+    </div>
 
-        <div class="menu-category">
-            <h3>✨ Combos</h3>
-            <div class="product-item">
-                <div class="product-info"><h4>Ración Mixta (20 und + Refresco 1L)</h4><p>19.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Ración Mixta', 19.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Ración Mixta">0</span>
-                    <button class="btn-qty" onclick="changeQty('Ración Mixta', 19.00, 1)">+</button>
+    <div class="slider-wrapper">
+        <div class="main-slider" id="slider">
+            
+            <section class="page-section">
+                <h2>Menú de Hoy</h2>
+                
+                <div class="menu-category">
+                    <h3>🥟 DUMPLINGS</h3>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Carne</h4><p>7.50$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Dumpling Carne', 7.50, -1)">-</button>
+                            <span id="qty-Dumpling Carne">0</span>
+                            <button class="btn-qty" onclick="changeQty('Dumpling Carne', 7.50, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Cerdo</h4><p>6.50$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Dumpling Cerdo', 6.50, -1)">-</button>
+                            <span id="qty-Dumpling Cerdo">0</span>
+                            <button class="btn-qty" onclick="changeQty('Dumpling Cerdo', 6.50, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Vegetales</h4><p>5.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Dumpling Vegetales', 5.00, -1)">-</button>
+                            <span id="qty-Dumpling Vegetales">0</span>
+                            <button class="btn-qty" onclick="changeQty('Dumpling Vegetales', 5.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Cerdo con Kimchi</h4><p>7.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Dumpling Cerdo con Kimchi', 7.00, -1)">-</button>
+                            <span id="qty-Dumpling Cerdo con Kimchi">0</span>
+                            <button class="btn-qty" onclick="changeQty('Dumpling Cerdo con Kimchi', 7.00, 1)">+</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Mochis + Bubble Milk</h4><p>9.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Mochis + Bubble Milk', 9.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Mochis + Bubble Milk">0</span>
-                    <button class="btn-qty" onclick="changeQty('Mochis + Bubble Milk', 9.00, 1)">+</button>
+
+                <div class="menu-category">
+                    <h3>🍜 TALLARINES & TTEOKBOKKI</h3>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Tallarines picantes</h4><p>8.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Tallarines picantes', 8.00, -1)">-</button>
+                            <span id="qty-Tallarines picantes">0</span>
+                            <button class="btn-qty" onclick="changeQty('Tallarines picantes', 8.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Tteokbokki Tradicional</h4><p>6.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Tteokbokki Tradicional', 6.00, -1)">-</button>
+                            <span id="qty-Tteokbokki Tradicional">0</span>
+                            <button class="btn-qty" onclick="changeQty('Tteokbokki Tradicional', 6.00, 1)">+</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Box Especial (Dumplings, Tteokbokki y Papas)</h4><p>11.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Box Especial', 11.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Box Especial">0</span>
-                    <button class="btn-qty" onclick="changeQty('Box Especial', 11.00, 1)">+</button>
+
+                <div class="menu-category">
+                    <h3>🧋 BEBIDAS</h3>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Bubble tea limón</h4><p>2.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Bubble tea limón', 2.00, -1)">-</button>
+                            <span id="qty-Bubble tea limón">0</span>
+                            <button class="btn-qty" onclick="changeQty('Bubble tea limón', 2.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Bubble tea frutilla</h4><p>3.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Bubble tea frutilla', 3.00, -1)">-</button>
+                            <span id="qty-Bubble tea frutilla">0</span>
+                            <button class="btn-qty" onclick="changeQty('Bubble tea frutilla', 3.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Bubble Milk frutilla</h4><p>4.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Bubble Milk frutilla', 4.00, -1)">-</button>
+                            <span id="qty-Bubble Milk frutilla">0</span>
+                            <button class="btn-qty" onclick="changeQty('Bubble Milk frutilla', 4.00, 1)">+</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div class="menu-category">
+                    <h3>✨ COMBOS</h3>
+                    <div class="product-item">
+                        <div class="product-info"><h4>RACIÓN MIXTA</h4><p>19.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Ración Mixta', 19.00, -1)">-</button>
+                            <span id="qty-Ración Mixta">0</span>
+                            <button class="btn-qty" onclick="changeQty('Ración Mixta', 19.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>MOCHIS + BUBBLE MILK</h4><p>9.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" onclick="changeQty('Combo Mochis', 9.00, -1)">-</button>
+                            <span id="qty-Combo Mochis">0</span>
+                            <button class="btn-qty" onclick="changeQty('Combo Mochis', 9.00, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="delivery-note">
+                    <span class="warning-text">⚠️ NOTA IMPORTANTE:</span>
+                    Por favor, infórmanos sobre cualquier alergia alimentaria. <br>
+                    Indícanos tu ubicación para confirmar el delivery. <br><br>
+                    <strong>📍 WhatsApp: 0412 101 0778</strong>
+                </div>
+            </section>
+
+            <section class="page-section">
+                <h2>Evento Especial</h2>
+                <div class="menu-category" style="border-color: var(--rose-pink);">
+                    <h3 style="color: var(--rose-pink);">🌹 Día de las Madres 🌹</h3>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Minicake floral</h4><p style="color:var(--rose-pink)">15.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" style="background:var(--rose-pink)" onclick="changeQty('Minicake floral', 15.00, -1)">-</button>
+                            <span id="qty-Minicake floral">0</span>
+                            <button class="btn-qty" style="background:var(--rose-pink)" onclick="changeQty('Minicake floral', 15.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Lunchbox Cake</h4><p style="color:var(--rose-pink)">9.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" style="background:var(--rose-pink)" onclick="changeQty('Lunchbox Cake', 9.00, -1)">-</button>
+                            <span id="qty-Lunchbox Cake">0</span>
+                            <button class="btn-qty" style="background:var(--rose-pink)" onclick="changeQty('Lunchbox Cake', 9.00, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info"><h4>Mochis Especiales</h4><p style="color:var(--rose-pink)">10.00$</p></div>
+                        <div class="qty-controls">
+                            <button class="btn-qty" style="background:var(--rose-pink)" onclick="changeQty('Mochis Madres', 10.00, -1)">-</button>
+                            <span id="qty-Mochis Madres">0</span>
+                            <button class="btn-qty" style="background:var(--rose-pink)" onclick="changeQty('Mochis Madres', 10.00, 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="page-section">
+                <h2>Sesión de Fotos</h2>
+                <div class="photo-grid">
+                    <div class="photo-card" onclick="openImg('1.jpeg')"><img src="1.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('2.jpeg')"><img src="2.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('3.jpeg')"><img src="3.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('4.jpeg')"><img src="4.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('5.jpeg')"><img src="5.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('6.jpeg')"><img src="6.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('7.jpeg')"><img src="7.jpeg"></div>
+                    <div class="photo-card" onclick="openImg('8.jpeg')"><img src="8.jpeg"></div>
+                </div>
+            </section>
         </div>
-
-        <div class="menu-category">
-            <h3>🥟 Dumplings</h3>
-            <div class="product-item">
-                <div class="product-info"><h4>Carne</h4><p>7.50$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Dumpling Carne', 7.50, -1)">-</button>
-                    <span class="qty-num" id="qty-Dumpling Carne">0</span>
-                    <button class="btn-qty" onclick="changeQty('Dumpling Carne', 7.50, 1)">+</button>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Cerdo</h4><p>6.50$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo', 6.50, -1)">-</button>
-                    <span class="qty-num" id="qty-Dumpling Cerdo">0</span>
-                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo', 6.50, 1)">+</button>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Vegetales</h4><p>5.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Dumpling Vegetales', 5.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Dumpling Vegetales">0</span>
-                    <button class="btn-qty" onclick="changeQty('Dumpling Vegetales', 5.00, 1)">+</button>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Cerdo con Kimchi</h4><p>7.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo con Kimchi', 7.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Dumpling Cerdo con Kimchi">0</span>
-                    <button class="btn-qty" onclick="changeQty('Dumpling Cerdo con Kimchi', 7.00, 1)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="menu-category">
-            <h3>🍜 Platos Principales</h3>
-            <div class="product-item">
-                <div class="product-info"><h4>Tallarines picantes</h4><p>8.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Tallarines picantes', 8.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Tallarines picantes">0</span>
-                    <button class="btn-qty" onclick="changeQty('Tallarines picantes', 8.00, 1)">+</button>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Tteokbokki Tradicional</h4><p>6.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Tteokbokki Tradicional', 6.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Tteokbokki Tradicional">0</span>
-                    <button class="btn-qty" onclick="changeQty('Tteokbokki Tradicional', 6.00, 1)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="menu-category">
-            <h3>🧋 Bebidas</h3>
-            <div class="product-item">
-                <div class="product-info"><h4>Bubble tea limón</h4><p>2.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Bubble tea limón', 2.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Bubble tea limón">0</span>
-                    <button class="btn-qty" onclick="changeQty('Bubble tea limón', 2.00, 1)">+</button>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Bubble tea frutilla</h4><p>3.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Bubble tea frutilla', 3.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Bubble tea frutilla">0</span>
-                    <button class="btn-qty" onclick="changeQty('Bubble tea frutilla', 3.00, 1)">+</button>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h4>Bubble Milk frutilla</h4><p>4.00$</p></div>
-                <div class="qty-controls">
-                    <button class="btn-qty" onclick="changeQty('Bubble Milk frutilla', 4.00, -1)">-</button>
-                    <span class="qty-num" id="qty-Bubble Milk frutilla">0</span>
-                    <button class="btn-qty" onclick="changeQty('Bubble Milk frutilla', 4.00, 1)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <p style="text-align: center; font-style: italic; margin-top: 20px;">*Por favor infórmanos si tienes alguna alergia o intolerancia</p>
-    </section>
+    </div>
 
     <div id="cart" class="cart-container">
-        <div class="cart-header">
-            <span>Tu Pedido 🛍️</span>
-            <span id="cart-total">Total: 0.00$</span>
+        <div style="display: flex; justify-content: space-between; font-weight: 900; margin-bottom: 8px;">
+            <span>Mi Pedido 🛍️</span>
+            <span id="cart-total">0.00$</span>
         </div>
-        <div id="cart-items"></div>
-        <a href="#" id="whatsapp-link" class="btn-send" target="_blank">Pedir por WhatsApp</a>
-        <button onclick="clearCart()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; cursor:pointer; width: 100%; text-align: center;">Vaciar pedido</button>
+        <div id="cart-items" style="max-height: 120px; overflow-y: auto; margin-bottom: 8px; font-size: 0.9rem;"></div>
+        <a href="#" id="whatsapp-link" class="btn-send" target="_blank">Enviar a WhatsApp</a>
     </div>
 
     <script>
-        let cart = {};
+        let currentPage = 0;
+        const totalPages = 3;
+        const pageNames = ["Ver Eventos 🌹", "Ver Fotos 📸", "🔙 Menú"];
 
-        function changeQty(name, price, delta) {
-            if (!cart[name]) {
-                cart[name] = { qty: 0, price: price };
-            }
-            cart[name].qty += delta;
-
-            if (cart[name].qty <= 0) {
-                cart[name].qty = 0;
-                delete cart[name];
-            }
-
-            const qtyLabel = document.getElementById(`qty-${name}`);
-            if (qtyLabel) qtyLabel.innerText = cart[name] ? cart[name].qty : 0;
-
-            updateCartUI();
+        function nextPage() {
+            currentPage = (currentPage + 1) % totalPages;
+            const offset = currentPage * 100;
+            document.getElementById('slider').style.transform = `translateX(-${offset}vw)`;
+            document.getElementById('toggleBtn').innerText = pageNames[currentPage];
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        function clearCart() {
-            for (const name in cart) {
-                const qtyLabel = document.getElementById(`qty-${name}`);
-                if (qtyLabel) qtyLabel.innerText = 0;
-            }
-            cart = {};
+        function openImg(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        let cart = {};
+        function changeQty(name, price, delta) {
+            if (!cart[name]) cart[name] = { qty: 0, price: price };
+            cart[name].qty += delta;
+            if (cart[name].qty <= 0) { cart[name].qty = 0; delete cart[name]; }
+            
+            const qtyLabel = document.getElementById(`qty-${name}`);
+            if (qtyLabel) qtyLabel.innerText = cart[name] ? cart[name].qty : 0;
             updateCartUI();
         }
 
         function updateCartUI() {
-            const cartElement = document.getElementById('cart');
             const itemsElement = document.getElementById('cart-items');
             const totalElement = document.getElementById('cart-total');
             const whatsappLink = document.getElementById('whatsapp-link');
 
             itemsElement.innerHTML = '';
             let total = 0;
-            let messageText = "¡Hola Okey-Dokey! Quisiera hacer el siguiente pedido:%0A%0A";
-            let hasItems = false;
+            let message = "¡Hola! Quisiera realizar este pedido:%0A";
 
             for (const name in cart) {
-                hasItems = true;
                 const item = cart[name];
-                const subtotal = item.qty * item.price;
-                total += subtotal;
-
-                itemsElement.innerHTML += `
-                    <div class="cart-item-row">
-                        <span>${item.qty}x ${name}</span>
-                        <span>${subtotal.toFixed(2)}$</span>
-                    </div>`;
-                
-                messageText += `- ${item.qty}x ${name} (${subtotal.toFixed(2)}$)%0A`;
+                total += item.qty * item.price;
+                itemsElement.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:4px"><span>${item.qty}x ${name}</span><span>${(item.qty * item.price).toFixed(2)}$</span></div>`;
+                message += `- ${item.qty}x ${name}%0A`;
             }
 
-            cartElement.style.display = hasItems ? 'block' : 'none';
-            totalElement.innerText = `Total: ${total.toFixed(2)}$`;
-            messageText += `%0A*Total: ${total.toFixed(2)}$*%0A%0A_Enviado desde el menú digital_`;
-
-            whatsappLink.href = `https://wa.me/584121010778?text=${messageText}`;
+            document.getElementById('cart').style.display = total > 0 ? 'block' : 'none';
+            totalElement.innerText = `${total.toFixed(2)}$`;
+            message += `%0ATotal: ${total.toFixed(2)}$`;
+            whatsappLink.href = `https://wa.me/584121010778?text=${message}`;
         }
     </script>
 </body>
